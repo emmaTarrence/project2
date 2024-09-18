@@ -29,10 +29,17 @@ void hash_map::insert(int key, float value){
 
 /*bool hash_map::remove(int key) { 
 }
-
+*/
 size_t hash_map::get_size() const{ 
+   size_t _size = 0;
 
-}
+   for(size_t i =0; i < _capacity; i++) {
+      if(_head){
+         _size++;
+      }
+   }
+   return _size;
+}/*
 size_t hash_map::get_capacity() const{ 
 
 }*/
