@@ -1,10 +1,6 @@
 #include "hash_map.h"
 #include<iostream>
 
- int main() { 
-    std::cout <<"running" << std::endl;
-    return 0;
- }
 
 hash_map::hash_map(size_t capacity){
    _size = 0;
@@ -25,11 +21,17 @@ void hash_map::insert(int key, float value){
 
 }
 
-//std::optional<float> get_value(int key) const{}
-
-/*bool hash_map::remove(int key) { 
+std::optional<float> hash_map::get_value(int key)const{
+      return std::nullopt; 
 }
-*/
+hash_map &hash_map::operator=(const hash_map &other){
+   return *this;
+}
+
+bool hash_map::remove(int key) { 
+   return true; 
+}
+
 size_t hash_map::get_size() const{ 
    size_t _size = 0;
 
