@@ -19,3 +19,25 @@ hash_map::hash_map(const hash_map &other){
       _head[i] = other._head[i];
    }
 }
+
+
+void hash_map::insert(int key, float value){
+
+}
+
+//std::optional<float> get_value(int key) const{}
+
+/*bool hash_map::remove(int key) { 
+}
+
+size_t hash_map::get_size() const{ 
+
+}
+size_t hash_map::get_capacity() const{ 
+
+}*/
+
+void hash_map::get_all_keys(int *keys){} 
+
+void hash_map::get_bucket_sizes(size_t *buckets) { }
+
