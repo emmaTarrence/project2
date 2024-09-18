@@ -39,10 +39,11 @@ size_t hash_map::get_size() const{
       }
    }
    return _size;
-}/*
-size_t hash_map::get_capacity() const{ 
+}
 
-}*/
+size_t hash_map::get_capacity() const{ 
+return _capacity;
+}
 
 void hash_map::get_all_keys(int *keys){} 
 
