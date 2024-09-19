@@ -67,4 +67,5 @@ void hash_map::get_all_keys(int *keys){
 void hash_map::get_bucket_sizes(size_t *buckets) { }
 
 hash_map::~hash_map() {
+   delete[] _head;
 }
