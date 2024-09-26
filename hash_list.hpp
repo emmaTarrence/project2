@@ -1,167 +1,204 @@
-#ifndef HASH_LIST_H
-#define HASH_LIST_H
 
-#include <optional>
-#include <stddef.h>
-#include <stdlib.h>
 #include "hash_list.h"
 #include "hash_map.h"
-/** A single key/value pair in the linked list */
+
+#include <iostream>
+//constructor 
+//where we set up the l
+
+/**-----------------------------------------------------------------------------------
+* START Part 1
+*------------------------------------------------------------------------------------*/
 template <typename K, typename V>
-
-struct node
-{
-    /** The key the node is storing */
-    K key;
-
-    /** the value the node is storing */
-    V value;
-
-    /** a pointer to the next node */
-    node *next;
-};
-
-/** A list that stores key/value pairs */
+hash_list<K,V>::hash_list() : size(0), head(nullptr), iter_ptr(nullptr) {}
 template <typename K, typename V>
-class hash_list
-{
+void hash_list<K,V>::insert(K key, V value) {
+   node<K,V>* current = head; 
+   int size = 0;
+   if(head == nullptr) {
+       head = new node<K,V>(); //allocate memory 
+       head->key = key;
+       head->value = value; 
+       head->next = nullptr;
+       size = size + 1; 
+       return; 
+   }
+   else{
+       while(current != nullptr) { 
+       
+           if(current->key == key){
+               current->value = value; 
+               return;
+           }
+           current = current->next;
+       }
+       node<K,V>* newNode= new node<K,V>();
+       newNode->key = key;
+       newNode->value = value;
+       newNode->next = head;
+       head = newNode;
 
-public:
+   }
 
-    /**
-     * @brief Create an empty list
-     */
-    hash_list();
+}
 
-    /**-----------------------------------------------------------------------------------
-     * START Part 1
-     *------------------------------------------------------------------------------------*/
+template <typename K, typename V>
+std::optional<float> hash_list<K,V>::get_value(K key) const { 
+   node<K,V>* current = head; 
+   while(current != nullptr) { 
+         
+       if(current->key == key){
+           return  current->value;
+       }
+       current = current->next;
+   }
+   return std::nullopt; 
+}
+template <typename K, typename V>
+bool hash_list<K,V>::remove(K key) { 
+   node<K,V>* curr = head; 
+   node<K,V>* prev = nullptr;
+   
+   while (curr != nullptr){
+       if (curr->key == key) {
+           if (prev == nullptr){
+               head = curr->next; 
+           } else {
+           prev->next = curr->next; 
+           }
 
-    /**
-     * @brief Insert a node with the corresponding key value pair into the list.
-     * If a node with the associated key already exists, update that node with the new value
-     * instead of adding a new node to the list.
-     * 
-     * @param key
-     *  The key to insert into the list
-     * @param value
-     *  The value to insert into the list
-     */
-    void insert(K key, V value);
+           delete curr; 
+           size--; 
+           return true; 
+       }
+       prev = curr; 
+       curr = curr -> next;
+   }
 
-    /**
-     * @brief Return an optional containing the value associated with the specified key. If the key
-     * isn't in the list return an empty optional.
-     * 
-     * @param key
-     *  The key to search the list for
-     * @return
-     *  If the key isn't in the list returns an empty optional
-     *  If the key is in the list returns the corresponding value
-     */
-    std::optional<float> get_value(K key) const;
+   return false;
+}
 
-    /**
-     * @brief Remove the node containing the specified key from the list and return true.
-     * If the key isn't in the list return false.
-     * 
-     * @param key
-     *  The key to remove from the list
-     * @return
-     *  True if the key was removed from the list
-     *  False if the key wasn't in the list
-     */
-    bool remove(K key);
+template <typename K, typename V>
+size_t hash_list<K,V>::get_size() const { 
+       node<K,V>* current = head; 
+       size_t count = 0;
+   while(current != nullptr) { 
+       count++;
+             current = current->next;
+}
+return count;
+}
 
-    /**
-     * @brief Return the number of nodes in the list. 
-     * This function must run in constant time
-     * 
-     * @return
-     *  the number of nodes in the list
-     */
-    size_t get_size() const;
-
-    /**
-     * @brief Free all memory associated with the nodes. 
-     * This must not free the nodes recursively
-     */
-    ~hash_list();
-
-
-    /**-----------------------------------------------------------------------------------
-     * END Part 1
-     *------------------------------------------------------------------------------------*/
+template < typename K, typename V>
+hash_list<K,V>::~hash_list() {
+   node<K,V>*current = head;
+   while(current != nullptr){
+       node<K,V>* next = current->next;
+       delete current;
+       current = next;
+   }
+   head = nullptr;
+}
 
 
-    /**-----------------------------------------------------------------------------------
-     * START Part 2
-     *------------------------------------------------------------------------------------*/
-    /**
-     * @brief The copy constructor
-     * 
-     * @param other
-     *  The list to create a copy of
-     */
-    hash_list(const hash_list &other);
+/**-----------------------------------------------------------------------------------
+* END Part 1
+*------------------------------------------------------------------------------------*/
 
-    /**
-     * @brief Assignment operator
-     * 
-     * @param other
-     *  The list to create a copy of 
-     * @return
-     *  A reference to the list that was created. This allows for code like
-     *  a = b = c to work
-     */
-    hash_list &operator=(const hash_list &other);
 
-    /**
-     * @brief Resets the iterator back to point to the first element in the list. If the list is 
-     * empty then the iterator is set to NULL.
-     */
-    void reset_iter();
+/**-----------------------------------------------------------------------------------
+* START Part 2
+*------------------------------------------------------------------------------------*/
 
-    /**
-     * @brief Moves the iterator to the next element. If the iterator points to the last element
-     * of the list when this is called the iterator is set to NULL. If the iterator is NULL
-     * when this function is called then this function does nothing
-     */
-    void increment_iter();
+template <typename K, typename V>
+hash_list<K,V>::hash_list(const hash_list &other) {
+   if (other.head == nullptr) {
+        head = nullptr;
+        size = 0;
+        return;
+   }
 
-    /**
-     * @brief Return an optional that contains a pointer to the key and a pointer to the value
-     * of the node pointed to by the iterator. If the iterator is NULL this returns
-     * an empty optional
-     * 
-     * @return
-     *  If the iterator is NULL returns an empty optional
-     *  Otherwise returns a pointer to the key/value pointed to by the current iterator
-     */
-    std::optional<std::pair<const K *, V *>> get_iter_value();
+   head = new node<K,V>();
+   head->key = other.head->key;
+   head->value = other.head->value;
 
-    /**
-     * @brief Returns true if the iterator is NULL
-     * 
-     * @return
-     *  True if the iterator is NULL
-     *  False otherwise
-     */
-    bool iter_at_end();
-    /**-----------------------------------------------------------------------------------
-     * END Part 2
-     *------------------------------------------------------------------------------------*/
+   node<K,V>* current = head;
+   node<K,V>* other_current = other.head->next;
+   
+   while (other_current != nullptr) {
+       current->next = new node<K,V>();
+       current = current->next;
+       current->key = other_current->key;
+       current->value = other_current->value;
+       other_current = other_current->next;
+   }
+   current->next = nullptr; 
+   size = other.size;
+}
 
-private:
+template <typename K, typename V>
+hash_list<K,V> &hash_list<K,V>::operator=(const hash_list &other) {     
+    if (this == &other) return *this;
 
-    /** The number of nodes in the list */
-    size_t size;
+  
+    node<K,V>* current = head;
+    while (current != nullptr) {
+        node<K,V>* next = current->next;
+        delete current;
+        current = next;
+    }
+    head = nullptr;
 
-    /** A pointer to the first node in the list */
-    node<K,V> *head;
+    size =  0;
+    
+    if (other.head == nullptr) {
+        return *this;
+    } 
+        head = new node<K,V>();
+        head->key = other.head->key;
+        head->value = other.head->value;
+        
+    node<K,V>* this_current = head;
+    node<K,V>* other_current = other.head->next;
 
-    /** The node that the iterator is currently pointing to */
-    node<K,V> *iter_ptr;
-};
+    while (other_current != nullptr) {
+        this_current->next = new node<K,V>();
+        this_current = this_current->next;
+        this_current->key = other_current->key;
+        this_current->value = other_current->value;
+        other_current = other_current->next;
+    }
+    this_current->next = nullptr; // Ensure last node's next is nullptr
+    size = other.size;
 
-#endif
+    return *this;
+}
+
+template <typename K, typename V>
+void hash_list<K,V>::reset_iter() {
+   iter_ptr = head;
+}
+
+template <typename K, typename V>
+void hash_list<K,V>::increment_iter() {
+   if (iter_ptr != nullptr) {
+       iter_ptr = iter_ptr->next;
+   }
+}
+
+template <typename K, typename V> 
+std::optional<std::pair<const K *, V *>> hash_list<K,V>::get_iter_value() { 
+   if (iter_ptr == nullptr) {
+       return std::nullopt;
+   }
+   return std::make_optional(std::make_pair(&iter_ptr->key, &iter_ptr->value));
+}
+
+template <typename K, typename V> 
+bool hash_list<K,V>::iter_at_end() { 
+       return iter_ptr == nullptr;
+}
+/**-----------------------------------------------------------------------------------
+* END Part 2
+*------------------------------------------------------------------------------------*/
+
