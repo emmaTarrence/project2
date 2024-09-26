@@ -1,6 +1,7 @@
 CC=g++
 CFLAGS=-std=c++17 -Wall -g
 
+
 # The source files we use for building custom_tests
 ALL_SRC=$(wildcard *.cpp)
 
@@ -8,7 +9,7 @@ ALL_SRC=$(wildcard *.cpp)
 APP=test
 
 custom_tests:
-	$(CC) $(CFLAGS) $(ALL_SRC) -o $(APP)	
+	$(CC) $(CFLAGS) main.cpp -o $(APP)	
 
 clean:
 	rm -f $(APP)
