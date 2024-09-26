@@ -1,22 +1,25 @@
 #include "hash_map.h"
 #include<iostream>
 
-hash_map::hash_map(size_t capacity) {
+template<typename K, typename V>
+hash_map<K,V>::hash_map(size_t capacity) {
     _size = 0;
     _capacity = capacity;
-    _head = new hash_list[_capacity];  
+    _head = new hash_list<K,V>[_capacity];  
 }
 
-hash_map::hash_map(const hash_map &other) {
+template<typename K, typename V>
+hash_map<K,V>::hash_map(const hash_map &other) {
     _capacity = other._capacity;
     _size = other._size;
-    _head = new hash_list[_capacity];
+    _head = new hash_list<K,V>[_capacity];
     for (size_t i = 0; i < other._capacity; i++) {
         _head[i] = other._head[i];  
     }
 }
 
-hash_map &hash_map::operator=(const hash_map &other) {
+template<typename K, typename V>
+hash_map<K,V> &hash_map<K,V>::operator=(const hash_map &other) {
     if (this == &other) return *this;
     delete[] _head;  
     _capacity = other._capacity;
@@ -28,7 +31,8 @@ hash_map &hash_map::operator=(const hash_map &other) {
     return *this;
 }
 
-void hash_map::insert(int key, float value) {
+template<typename K, typename V>
+void hash_map<K,V>::insert(K key, V value) {
     int new_key = abs(key) % _capacity;  
     std::optional<float> existing_value = _head[new_key].get_value(key);
     if (!existing_value.has_value()) {
@@ -37,12 +41,14 @@ void hash_map::insert(int key, float value) {
     _head[new_key].insert(key, value); 
 }
 
-std::optional<float> hash_map::get_value(int key) const {
+template<typename K, typename V>
+std::optional<float> hash_map::get_value(K key) const {
     int new_key = abs(key) % _capacity;  
     return _head[new_key].get_value(key);  
 }
 
-bool hash_map::remove(int key) {
+template<typename K, typename V>
+bool hash_map<K,V>::remove(K key) {
     int new_key = abs(key) % _capacity; 
     bool is_removed = _head[new_key].remove(key); 
     if (is_removed) {
@@ -51,20 +57,23 @@ bool hash_map::remove(int key) {
     return is_removed;
 }
 
-size_t hash_map::get_size() const {
+template<typename K, typename V>
+size_t hash_map<K,V>::get_size() const {
     return _size;  
 }
 
-size_t hash_map::get_capacity() const {
+template<typename K, typename V>
+size_t hash_map<K,V>::get_capacity() const {
     return _capacity;  
 }
 
-void hash_map::get_all_keys(int *keys) {
+template<typename K, typename V>
+void hash_map<K,V>::get_all_keys(K *keys) {
     size_t index = 0;
     for (size_t i = 0; i < _capacity; i++) {
         _head[i].reset_iter();  
         while (!_head[i].iter_at_end()) {
-            std::optional<std::pair<const int *, float *>> iter_value = _head[i].get_iter_value();
+            std::optional<std::pair<K *, V *>> iter_value = _head[i].get_iter_value();
             if (iter_value.has_value()) {
                 keys[index] = *(iter_value->first); 
                 index++;
@@ -74,12 +83,14 @@ void hash_map::get_all_keys(int *keys) {
     }
 }
 
-void hash_map::get_bucket_sizes(size_t *buckets) {
+template<typename K, typename V>
+void hash_map<K,V>::get_bucket_sizes(size_t *buckets) {
     for (size_t i = 0; i < _capacity; ++i) {
         buckets[i] = _head[i].get_size(); 
     }
 }
 
-hash_map::~hash_map() {
+template<typename K, typename V>
+hash_map<K,V>::~hash_map() {
     delete[] _head;  
 }

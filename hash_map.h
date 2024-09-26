@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 #include "hash_list.h"
-
+template<typename K, typename V>
 class hash_map
 {
 
@@ -45,7 +45,7 @@ public:
      * @param value
      *  The value to insert
      */
-    void insert(int key, float value);
+    void insert(K key, V value);
 
     /**
      * @brief Return an optional containing the value associated with the specified key.
@@ -57,7 +57,7 @@ public:
      *  An empty optional (if the key isn't in the map), otherwise return an optional
      *  containing the value associated with the specified key
      */
-    std::optional<float> get_value(int key) const;
+    std::optional<float> get_value(K key) const;
 
     /**
      * @brief Remove the key and corresponding value from the map and return true.
@@ -69,7 +69,7 @@ public:
      *  True if key was present
      *  False otherwise
      */
-    bool remove(int key);
+    bool remove(K key);
 
     /**
      * @brief Return the number of key/value pairs in the map
@@ -91,7 +91,7 @@ public:
      *  A pointer to an array that has enough space to store all the keys
      *  in the hash_map.
      */
-    void get_all_keys(int *keys);
+    void get_all_keys(K *keys);
 
     /**
      * @brief Get the number of elements in each hash_list pointed to by _head.
@@ -120,7 +120,7 @@ private:
     size_t _capacity;
 
     /** A pointer to an array of hash_lists */
-    hash_list *_head;
+    hash_list<K,V> *_head;
 };
 
 #endif
