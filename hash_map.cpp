@@ -2,7 +2,9 @@
 #include<iostream>
 
 template<typename K, typename V>
-hash_map<K,V>::hash_map(size_t capacity) {
+hash_map<K,V>::hash_map(size_t capacity,
+             float upper_load_factor,
+             float lower_load_factor) {
     _size = 0;
     _capacity = capacity;
     _head = new hash_list<K,V>[_capacity];  
@@ -42,7 +44,7 @@ void hash_map<K,V>::insert(K key, V value) {
 }
 
 template<typename K, typename V>
-std::optional<float> hash_map::get_value(K key) const {
+std::optional<V> hash_map<K,V>::get_value(K key) const {
     int new_key = abs(key) % _capacity;  
     return _head[new_key].get_value(key);  
 }

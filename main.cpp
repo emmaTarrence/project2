@@ -2,7 +2,7 @@
 #include "hash_map.h"
 
 #include <iostream> 
- int main() { 
+int main() { 
     std::cout <<"running" << std::endl;
     return 0;
  }

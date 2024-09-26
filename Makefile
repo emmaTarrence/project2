@@ -9,7 +9,7 @@ ALL_SRC=$(wildcard *.cpp)
 APP=test
 
 custom_tests:
-	$(CC) $(CFLAGS) main.cpp -o $(APP)	
+	$(CC) $(CFLAGS) -o $(APP) $(ALL_SRC)
 
 clean:
 	rm -f $(APP)

@@ -1,4 +1,3 @@
-
 #ifndef HASH_MAP_H
 #define HASH_MAP_H
 
@@ -7,7 +6,8 @@
 #include <stdlib.h>
 
 #include "hash_list.h"
-template<typename K, typename V>
+
+template <typename K, typename V>
 class hash_map
 {
 
@@ -15,7 +15,9 @@ public:
     /**
      * @brief Construct a new hash map object
      */
-    hash_map(size_t capacity);
+    hash_map(size_t capacity,
+             float upper_load_factor,
+             float lower_load_factor);
 
     /**
      * @brief Construct a new hash map object
@@ -57,7 +59,7 @@ public:
      *  An empty optional (if the key isn't in the map), otherwise return an optional
      *  containing the value associated with the specified key
      */
-    std::optional<float> get_value(K key) const;
+    std::optional<V> get_value(K key) const;
 
     /**
      * @brief Remove the key and corresponding value from the map and return true.
@@ -94,6 +96,18 @@ public:
     void get_all_keys(K *keys);
 
     /**
+     * @brief Copies all the keys from the hash_map into the specified array
+     * and sorts the array by key value. The smallest key value should be at the
+     * front of the array, and the largest key value should be at the end of the
+     * array
+     *
+     * @param keys
+     *  A pointer to an array that has enough space to store all the keys
+     *  in the hash_map.
+     */
+    void get_all_sorted_keys(K *keys);
+
+    /**
      * @brief Get the number of elements in each hash_list pointed to by _head.
      * So buckets[0] should be the number of elements in the hash list at index 0
      *    buckets[1] should be the number of elements in the hash list at index 1
@@ -113,14 +127,34 @@ public:
     ~hash_map();
 
 private:
+    /** A pointer to an array of hash_lists */
+    hash_list<K, V> *_head;
+
     /** The number of key/value pairs in the map */
     size_t _size;
 
     /** The number of buckets in the hash map */
     size_t _capacity;
 
-    /** A pointer to an array of hash_lists */
-    hash_list<K,V> *_head;
+    /** The load factor that determines when we increase hash map capacity */
+    float _upper_load_factor;
+
+    /** The load factor that determines when we decrease hash map capacity */
+    float _lower_load_factor;
+
+    /** Built in hashing function for type K */
+    std::hash<K> _hash;
+
+    /**
+     * The capacities that we're using for re-sizing. This needs to be set to
+     * {209, 1021, 2039}. We've defined this below for you
+     */
+    static size_t _capacities[];
 };
+
+template <typename K, typename V>
+size_t hash_map<K, V>::_capacities[] = {209, 1021, 2039};
+
+#include "hash_map.hpp"
 
 #endif

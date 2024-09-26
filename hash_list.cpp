@@ -2,7 +2,6 @@
 #include "hash_map.h"
 
 #include <iostream>
-hash_list::hash_list() : size(0), head(nullptr), iter_ptr(nullptr) {}
 //constructor 
 //where we set up the l
 
@@ -10,8 +9,11 @@ hash_list::hash_list() : size(0), head(nullptr), iter_ptr(nullptr) {}
 * START Part 1
 *------------------------------------------------------------------------------------*/
 template <typename K, typename V>
-void hash_list::insert(K key, V value) {
-   node<k,V>* current = head; 
+hash_list<K,V>::hash_list() : size(0), head(nullptr), iter_ptr(nullptr) {}
+template <typename K, typename V>
+void hash_list<K,V>::insert(K key, V value) {
+   node<K,V>* current = head; 
+   int size = 0;
    if(head == nullptr) {
        head = new node<K,V>(); //allocate memory 
        head->key = key;
@@ -29,7 +31,7 @@ void hash_list::insert(K key, V value) {
            }
            current = current->next;
        }
-       node* newNode= new node<K,V>();
+       node<K,V>* newNode= new node<K,V>();
        newNode->key = key;
        newNode->value = value;
        newNode->next = head;
@@ -40,8 +42,8 @@ void hash_list::insert(K key, V value) {
 }
 
 template <typename K, typename V>
-std::optional<V> hash_list<K,V>::get_value(K key) const { 
-   node* current = head; 
+std::optional<float> hash_list<K,V>::get_value(K key) const { 
+   node<K,V>* current = head; 
    while(current != nullptr) { 
          
        if(current->key == key){
@@ -51,7 +53,7 @@ std::optional<V> hash_list<K,V>::get_value(K key) const {
    }
    return std::nullopt; 
 }
-
+template <typename K, typename V>
 bool hash_list<K,V>::remove(K key) { 
    node<K,V>* curr = head; 
    node<K,V>* prev = nullptr;
@@ -75,8 +77,8 @@ bool hash_list<K,V>::remove(K key) {
    return false;
 }
 
-template <typename K< typename V>
-size_t hash_list::<K,V>get_size() const { 
+template <typename K, typename V>
+size_t hash_list<K,V>::get_size() const { 
        node<K,V>* current = head; 
        size_t count = 0;
    while(current != nullptr) { 
@@ -86,7 +88,7 @@ size_t hash_list::<K,V>get_size() const {
 return count;
 }
 
-templat < typename K, typename V>
+template < typename K, typename V>
 hash_list<K,V>::~hash_list() {
    node<K,V>*current = head;
    while(current != nullptr){
@@ -107,7 +109,7 @@ hash_list<K,V>::~hash_list() {
 * START Part 2
 *------------------------------------------------------------------------------------*/
 
-tmeplate <typename K, typename V>
+template <typename K, typename V>
 hash_list<K,V>::hash_list(const hash_list &other) {
    if (other.head == nullptr) {
         head = nullptr;
@@ -155,8 +157,8 @@ hash_list<K,V> &hash_list<K,V>::operator=(const hash_list &other) {
         head->key = other.head->key;
         head->value = other.head->value;
         
-    node* this_current = head;
-    node* other_current = other.head->next;
+    node<K,V>* this_current = head;
+    node<K,V>* other_current = other.head->next;
 
     while (other_current != nullptr) {
         this_current->next = new node<K,V>();
