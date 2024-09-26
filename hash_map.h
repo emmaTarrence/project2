@@ -7,6 +7,10 @@
 
 #include "hash_list.h"
 
+template<typename K, typename V>
+class hash_list;  
+
+
 template <typename K, typename V>
 class hash_map
 {
@@ -155,6 +159,6 @@ private:
 template <typename K, typename V>
 size_t hash_map<K, V>::_capacities[] = {209, 1021, 2039};
 
-#include "hash_map.hpp"
+//\\#include "hash_map.hpp"
 
 #endif

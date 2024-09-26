@@ -4,7 +4,8 @@
 #include <optional>
 #include <stddef.h>
 #include <stdlib.h>
-
+#include "hash_list.h"
+#include "hash_map.h"
 /** A single key/value pair in the linked list */
 template <typename K, typename V>
 

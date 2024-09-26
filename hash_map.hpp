@@ -1,6 +1,8 @@
 #include<iostream>
 #include<optional>
 #include "hash_map.h"
+#include "hash_list.h"
+
 
 template<typename K, typename V>
 hash_map<K,V>::hash_map(size_t capacity,
@@ -27,7 +29,7 @@ hash_map<K,V> &hash_map<K,V>::operator=(const hash_map &other) {
     delete[] _head;  
     _capacity = other._capacity;
     _size = other._size;
-    _head = new hash_list[_capacity];
+    _head = new hash_list<K,V>[_capacity];
     for (size_t i = 0; i < _capacity; i++) {
         _head[i] = other._head[i];  
     }
@@ -76,8 +78,8 @@ void hash_map<K,V>::get_all_keys(K *keys) {
     for (size_t i = 0; i < _capacity; i++) {
         _head[i].reset_iter();  
         while (!_head[i].iter_at_end()) {
-            std::optional<std::pair<K *, V *>> iter_value = _head[i].get_iter_value();
-            if (iter_value.has_value()) {
+            std::optional<std::pair<const K *, V *>> iter_value = _head[i].get_iter_value();
+if (iter_value.has_value()) {
                 keys[index] = *(iter_value->first); 
                 index++;
             }
