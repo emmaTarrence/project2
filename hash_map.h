@@ -98,7 +98,8 @@ public:
      *  in the hash_map.
      */
     void get_all_keys(K *keys);
-
+    void rehash(size_t);
+    bool checkRehash();
     /**
      * @brief Copies all the keys from the hash_map into the specified array
      * and sorts the array by key value. The smallest key value should be at the
