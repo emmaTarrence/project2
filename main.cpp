@@ -1,5 +1,5 @@
 #include <iostream>
-#include "hash_map.hpp"
+#include "hash_map.h"
 
 void test_insert() {
     std::cout << "Testing insert function...\n";

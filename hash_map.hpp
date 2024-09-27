@@ -1,8 +1,5 @@
 #include<iostream>
 #include<optional>
-#include "hash_map.h"
-#include "hash_list.h"
-#include"hash_list.hpp"
 
 
 template<typename K, typename V>
@@ -107,6 +104,10 @@ bool hash_map<K,V>::checkRehash() {
     return (current_load_factor > _upper_load_factor || current_load_factor < _lower_load_factor);
 }
 
+template<typename K, typename V>
+ void hash_map<K,V>::get_all_sorted_keys(K *keys){
+    
+ }
 template<typename K, typename V>
 void hash_map<K,V>::rehash(size_t new_capacity) {
     hash_list<K, V>* old_head = _head;

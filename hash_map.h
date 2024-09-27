@@ -4,11 +4,7 @@
 #include <optional>
 #include <stddef.h>
 #include <stdlib.h>
-
 #include "hash_list.h"
-
-template<typename K, typename V>
-class hash_list;  
 
 
 template <typename K, typename V>
@@ -40,7 +36,7 @@ public:
      *  Returns a reference to the newly constructed hash map. This ensures that
      *  a = b = c works
      */
-    hash_map &operator=(const hash_map &other);
+    hash_map<K,V> &operator=(const hash_map &other);
 
     /**
      * @brief Insert the key/value pair into the map. If the specified key already exists
@@ -98,7 +94,7 @@ public:
      *  in the hash_map.
      */
     void get_all_keys(K *keys);
-    void rehash(size_t);
+    void rehash(size_t new_capacity);
     bool checkRehash();
     /**
      * @brief Copies all the keys from the hash_map into the specified array
@@ -160,6 +156,6 @@ private:
 template <typename K, typename V>
 size_t hash_map<K, V>::_capacities[] = {209, 1021, 2039};
 
-//\\#include "hash_map.hpp"
+#include "hash_map.hpp"
 
 #endif

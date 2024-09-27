@@ -1,7 +1,3 @@
-
-#include "hash_list.h"
-#include "hash_map.h"
-
 #include <iostream>
 //constructor 
 //where we set up the l
@@ -201,4 +197,3 @@ bool hash_list<K,V>::iter_at_end() {
 /**-----------------------------------------------------------------------------------
 * END Part 2
 *------------------------------------------------------------------------------------*/
-
