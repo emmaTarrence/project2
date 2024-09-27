@@ -1,70 +1,80 @@
 #include <iostream>
+#include <cassert>
 #include "hash_map.h"
 
-void test_insert() {
-    std::cout << "Testing insert function...\n";
-    hash_map<int, float> map(10, 0.75, 0.5);  // Example capacity and load factor
+void test_hash_map() {
+    // Create a hash map with initial capacity, upper and lower load factors
+    hash_map<int, std::string> map(10, 0.7f, 0.2f);
 
-    map.insert(1, 1.1f);
-    map.insert(2, 2.2f);
-    map.insert(3, 3.3f);
+    // Test insertion
+    map.insert(1, "One");
+    map.insert(2, "Two");
+    map.insert(3, "Three");
 
-    if (map.get_value(1) == 1.1f && map.get_value(2) == 2.2f && map.get_value(3) == 3.3f) {
-        std::cout << "Insert test passed.\n";
-    } else {
-        std::cout << "Insert test failed.\n";
+    // Test size after insertions
+    assert(map.get_size() == 3);
+    std::cout << "Insertion test passed. Size: " << map.get_size() << std::endl;
+
+    // Test retrieval
+    auto value = map.get_value(2);
+    assert(value.has_value() && value.value() == "Two");
+    std::cout << "Retrieval test passed. Value: " << value.value() << std::endl;
+
+    // Test retrieval of a non-existing key
+    auto non_existing_value = map.get_value(4);
+    assert(!non_existing_value.has_value());
+    std::cout << "Non-existing retrieval test passed." << std::endl;
+
+    // Test removal
+    bool removed = map.remove(2);
+    assert(removed);
+    assert(map.get_size() == 2);
+    assert(!map.get_value(2).has_value());
+    std::cout << "Removal test passed. Size: " << map.get_size() << std::endl;
+
+    // Test rehashing by exceeding the upper load factor
+    for (int i = 4; i <= 10; i++) {
+        map.insert(i, "Value " + std::to_string(i));
+        std::cout <<"adding: "<< i <<std::endl;
     }
-}
 
-void test_remove() {
-    std::cout << "Testing remove function...\n";
-    hash_map<int, float> map(10, 0.75, 0.5);
+    // Check size and capacity after rehashing
+    assert(map.get_size() == 7);
+    assert(map.get_capacity() > 10); // Ensure capacity increased
+    std::cout << "Rehashing test passed. New Size: " << map.get_size() << ", New Capacity: " << map.get_capacity() << std::endl;
 
-    map.insert(1, 1.1f);
-    map.insert(2, 2.2f);
-    map.remove(1);
-
-    if (map.get_size() == 1 && map.get_value(2) == 2.2f) {
-        std::cout << "Remove test passed.\n";
-    } else {
-        std::cout << "Remove test failed.\n";
+    // Test retrieving all keys
+    int keys[10];
+    map.get_all_keys(keys);
+    std::cout << "All keys: ";
+    for (size_t i = 0; i < map.get_size(); i++) {
+        std::cout << keys[i] << " ";
     }
-}
+    std::cout << std::endl;
 
-void test_get_value() {
-    std::cout << "Testing get_value function...\n";
-    hash_map<int, float> map(10, 0.75, 0.5);
-
-    map.insert(1, 1.1f);
-    map.insert(2, 2.2f);
-
-    if (map.get_value(1) == 1.1f && map.get_value(2) == 2.2f) {
-        std::cout << "Get value test passed.\n";
-    } else {
-        std::cout << "Get value test failed.\n";
+    // Test sorted keys
+    int sorted_keys[10];
+    map.get_all_sorted_keys(sorted_keys);
+    std::cout << "Sorted keys: ";
+    for (size_t i = 0; i < map.get_size(); i++) {
+        std::cout << sorted_keys[i] << " ";
     }
-}
+    std::cout << std::endl;
 
-void test_resize() {
-    std::cout << "Testing resize function...\n";
-    hash_map<int, float> map(3, 0.75, 0.5);  // Smaller capacity to trigger resizing
-
-    map.insert(1, 1.1f);
-    map.insert(2, 2.2f);
-    map.insert(3, 3.3f);  // This should cause a resize
-
-    if (map.get_capacity() > 3) {  // Assuming get_capacity() returns the capacity
-        std::cout << "Resize test passed.\n";
-    } else {
-        std::cout << "Resize test failed.\n";
+    // Test bucket sizes
+    size_t bucket_sizes[map.get_capacity()];
+    map.get_bucket_sizes(bucket_sizes);
+    std::cout << "Bucket sizes: ";
+    for (size_t i = 0; i < map.get_capacity(); i++) {
+        std::cout << bucket_sizes[i] << " ";
     }
+    std::cout << std::endl;
+
+    // Cleanup is handled by the destructor
 }
 
 int main() {
-    test_insert();
-    test_remove();
-    test_get_value();
-    test_resize();
-    std::cout << "All tests complete.\n";
+    test_hash_map();
+    std::cout << "All tests passed!" << std::endl;
     return 0;
 }

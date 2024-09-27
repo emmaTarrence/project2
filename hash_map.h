@@ -72,7 +72,7 @@ public:
      *  False otherwise
      */
     bool remove(K key);
-
+size_t find_nearest_capacity(size_t new_capacity);
     /**
      * @brief Return the number of key/value pairs in the map
      */

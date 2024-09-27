@@ -33,13 +33,13 @@ void hash_list<K,V>::insert(K key, V value) {
        newNode->value = value;
        newNode->next = head;
        head = newNode;
-
+size++;
    }
 
 }
 
 template <typename K, typename V>
-std::optional<float> hash_list<K,V>::get_value(K key) const { 
+std::optional<V> hash_list<K,V>::get_value(K key) const { 
    node<K,V>* current = head; 
    while(current != nullptr) { 
          

@@ -57,7 +57,7 @@ public:
      *  If the key isn't in the list returns an empty optional
      *  If the key is in the list returns the corresponding value
      */
-    std::optional<float> get_value(K key) const;
+    std::optional<V> get_value(K key) const;
 
     /**
      * @brief Remove the node containing the specified key from the list and return true.
