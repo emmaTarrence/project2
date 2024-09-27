@@ -100,3 +100,32 @@ template<typename K, typename V>
 hash_map<K,V>::~hash_map() {
     delete[] _head;  
 }
+
+template<typename K, typename V>
+bool hash_map<K,V>::checkRehash() {
+    float current_load_factor = static_cast<float>(_size) / _capacity;
+    return (current_load_factor > _upper_load_factor || current_load_factor < _lower_load_factor);
+}
+
+template<typename K, typename V>
+void hash_map<K,V>::rehash(size_t new_capacity) {
+    hash_list<K, V>* old_head = _head;
+    size_t old_capacity = _capacity;
+
+    _head = new hash_list<K, V>[new_capacity];  
+    _capacity = new_capacity;
+    _size = 0;  
+
+    for (size_t i = 0; i < old_capacity; ++i) {
+        old_head[i].reset_iter();
+        while (!old_head[i].iter_at_end()) {
+            auto iter_value = old_head[i].get_iter_value();
+            if (iter_value.has_value()) {
+                insert(*(iter_value->first), *(iter_value->second));  
+            }
+            old_head[i].increment_iter();
+        }
+    }
+
+    delete[] old_head; 
+}
